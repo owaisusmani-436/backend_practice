@@ -1,42 +1,20 @@
 import dotenv from "dotenv";
-import connectDB from "./db/index.db.js";
-import {app} from "./app.js"
-
 dotenv.config({
   path: "./.env",
 });
 
+import connectDB from "./db/index.db.js";
+import { app } from "./app.js";
+
 connectDB()
-.then(() => { 
-  app.listen(process.env.PORT || 5000 , ()=> {
-    console.log(`server is running at port ${process.env.PORT}`);
+  .then(() => {
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`server is running at port ${process.env.PORT}`);
+    });
   })
-})
-.catch((err) => { 
-  console.log("mongodb connection failed" , err)
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  .catch((err) => {
+    console.log("mongodb connection failed", err);
+  });
 
 // this ()() is iffy means function is going to xecute imediately
 /*

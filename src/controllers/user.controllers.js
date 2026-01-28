@@ -1,10 +1,12 @@
 import { asyncHandler } from "../utils/asynchandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import {User} from "../models/user.models.js"
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
-import {ApiResponse} from "../utils/ApiResponse.js"
+import { User } from "../models/user.models.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
-const registerUser = asyncHandler(async (req , res) => {
+const registerUser = asyncHandler(async (req, res) => {
+  console.log("MULTER FILES ===>", req.files);
+
   //logically steps -->
 
   //get user deatils from frontend
@@ -21,6 +23,7 @@ const registerUser = asyncHandler(async (req , res) => {
   //get user deatils from frontend
   const { fullName, email, username, password } = req.body;
   console.log("email: ", email);
+  console.log("req.files: ", req.files);
 
   //validation - not empty
   if (
@@ -40,7 +43,7 @@ const registerUser = asyncHandler(async (req , res) => {
 
   //check for images , and avatar
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.avatar[0]?.path;
+  const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
   if (!avatarLocalPath) {
     throw new ApiError("400", "avatar file is required");
@@ -76,9 +79,9 @@ const registerUser = asyncHandler(async (req , res) => {
   }
 
   //return response
-  return res.status(201).json(
-    new ApiResponse(200,createdUser, "user registered successfully" )
-  )
-})
+  return res
+    .status(201)
+    .json(new ApiResponse(200, createdUser, "user registered successfully"));
+});
 
 export { registerUser };
