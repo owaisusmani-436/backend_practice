@@ -53,14 +53,16 @@ userSchema.pre("save", async function () {
   // If password wasn't changed, skip re-hashing
   if (!this.isModified("password")) return;
 
-  this.password = await bcrypt.hash(this.password, 10);
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password , this.password)
 }
 
-userSchema.methods.generateAccessToken = async function () {
+userSchema.methods.generateAccessToken =  function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -75,7 +77,7 @@ userSchema.methods.generateAccessToken = async function () {
   )
 };
 
-userSchema.methods.generateRefreshToken = async function () {
+userSchema.methods.generateRefreshToken =  function () {
   return jwt.sign(
     {
       _id: this._id,

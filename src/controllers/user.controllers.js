@@ -123,14 +123,18 @@ const loginUser = asyncHandler(async(req,res) => {
     throw new ApiError (400 , "username or email is required")
   }
 
+  if (!password){
+    throw new ApiError (400 , "password is required")
+  }
+
   const user = await User.findOne({
     $or : [{username} , {email}]
   })
 
   if (!user){
     throw new ApiError (404 , "user does not exist")
-
   }
+
 
   const isPasswordValid = await user.isPasswordCorrect(password)
 
@@ -179,8 +183,8 @@ const options = {
 
 return res
 .status(200)
-.clearcookie("accessToken" , options)
-.clearcookie("refreshToken" , options)
+.clearCookie("accessToken" , options)
+.clearCookie("refreshToken" , options)
 .json(new ApiResponse(200,{},"user logged out successfully"))
 
 })
